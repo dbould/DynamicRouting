@@ -3,7 +3,6 @@
 namespace Tests\Handler;
 
 use ElementsFramework\DynamicRouting\Model\DynamicRoute;
-use ElementsFramework\DynamicRouting\Service\RouteDispatcher;
 use ElementsFramework\DynamicRouting\Handler\RedirectRouteHandler;
 use Illuminate\Http\Request;
 use Tests\BaseTest;
@@ -18,18 +17,17 @@ class RedirectRouteHandlerTest extends BaseTest
             'pattern' => '/test',
             'method' => 'get',
             'handler' => 'RedirectRouteHandler',
-            'configuration' => ['target' => '/', 'status_code' => 302],
+            'configuration' => ['target' => 'http://google.com', 'status_code' => 302],
         ]);
 
         $redirectRoute = new RedirectRouteHandler();
-        $response = $redirectRoute->process(new Request, $route);
+        $response = $redirectRoute->process(new Request(), $route);
 
         $this->assertEquals(302, $response->getStatusCode());
     }
 
     public function testIsValidTargetFalse()
     {
-
         $route = new DynamicRoute();
         $route->fill([
             'name' => 'test',
